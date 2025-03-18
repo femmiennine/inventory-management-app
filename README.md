@@ -9,7 +9,7 @@
 
 ## Login Sample
 
-# Running the App
+## Running the App
 
 Your own keys must be given in env file. See .env.example file for reference.
 
