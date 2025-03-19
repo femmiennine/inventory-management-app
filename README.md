@@ -2,8 +2,8 @@
 
 ## Tech Stack Used
 
-- Frontend: React, Redux Toolkit, CSS
-- Backend: Node.js, Express.js, MongoDB
+- Frontend: TypeScript, React, Redux Toolkit, CSS
+- Backend: TypeScript, Node.js, Express.js, MongoDB
 
 ## Features
 
