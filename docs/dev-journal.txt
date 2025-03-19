@@ -1,0 +1,39 @@
+18/03/2025
+Project Setup and Configuration
+1. Initialized Git Repository & Setup GitHub
+- Created a GitHub repo: inventory-management-app
+- cloned the repo using SourceTree
+- Fixed authentication issue in SourceTree: replaced password auth with a GitHub Personal Access Token (PAT)
+- Successfully pushed the initial commit to the remote repo
+2. Backend Setup
+- Installed necessary dependencies:
+    - express
+    - typescript
+    - mongoose
+    - dotenv
+    - nodemon
+    - cors
+    - @types/node
+    - @types/express
+- Confirgured TypeScript (tsconfig.json)
+- Set up an Express server (server.ts) with a simple GET / route
+- Created a .env file to store environment variables
+- Created a .gitignore file to ignore node_modules and .env
+- Created a script to run the server using nodemon
+3. Frontend Setup
+- Created a React + Vite Project
+- Installed necessary dependencies:
+    - react
+    - react-dom
+    - react-router-dom
+    - react-redux
+    - redux-toolkit
+    - vite
+
+19/03/2025
+1. Created UserModel, apiErrorHandler
+2. hashPassword by bcrypt
+3. sendEmailVerification by nodemailer
+4. Created UserController
+5. Learned about: ```type UserRegistrationBody = Pick<UserInterface, 'name' | 'email' | 'password'>;```
+Next Steps: valition, fix hashPassword in UserController, create auth middleware, create auth/user routes

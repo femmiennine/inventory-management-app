@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import connectDB from './config/db';
-import dotenv from 'dotenv';
+import { dev } from './config/dev';
 
-dotenv.config();
 connectDB(); // Connect to MongoDB
 
 const app = express();
+const PORT = dev.app.port;
 
 // Body parser middleware
 app.use(express.json());
@@ -16,7 +16,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send('API is running...');
 });
 
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () =>
-  console.log(`Server running on port http://localhost:${PORT}`)
-);
+app.listen(PORT, async () => {
+  console.log(`🚀 Server running on port http://localhost:${PORT}`);
+  console.log('🛑 To stop the server, press CTRL + C');
+  await connectDB();
+});
