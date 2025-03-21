@@ -7,6 +7,8 @@
 
 ## Features
 
+Development of this project is ongoing. Features will be added shortly.
+
 ## Login Sample
 
 ## Running the App
