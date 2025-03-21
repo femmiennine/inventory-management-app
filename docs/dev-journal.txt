@@ -37,3 +37,8 @@ Project Setup and Configuration
 4. Created UserController
 5. Learned about: ```type UserRegistrationBody = Pick<UserInterface, 'name' | 'email' | 'password'>;```
 Next Steps: valition, fix hashPassword in UserController, create auth middleware, create auth/user routes
+20/03/2025
+1. Created UserValidation
+2 Created auth middleware
+21/03/2025
+1. Created auth/user routes

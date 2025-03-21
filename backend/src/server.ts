@@ -1,7 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import connectDB from './config/db';
 import { dev } from './config/dev';
+import userRouter from './routes/userRoutes';
 
 connectDB(); // Connect to MongoDB
 
@@ -9,11 +10,20 @@ const app = express();
 const PORT = dev.app.port;
 
 // Body parser middleware
-app.use(express.json());
+app.use(express.json()); // raw JSON
+app.use(express.urlencoded({ extended: true })); // HTML forms
 app.use(cors());
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('API is running...');
+// routes
+app.use('/api/users', userRouter);
+
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.send('Welcome to the Server!');
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 });
 
 app.listen(PORT, async () => {

@@ -1,40 +1,54 @@
-import express, { Request, Response } from 'express';
-import User, { UserInterface } from '../models/UserModel';
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  RequestHandler,
+} from 'express';
+import User from '../models/UserModel';
 import { errorRes, successRes } from '../middleware/apiErrorHandler';
 import { sendVerificationEmail } from '../utils/sendVerficationEmail';
 import { hashedPassword } from '../helpers/hashPassword';
+import randomString from 'randomstring';
 
-type UserRegistrationBody = Pick<UserInterface, 'name' | 'email' | 'password'>;
+// Define expected body shape
+interface UserRegistrationBody {
+  name: string;
+  email: string;
+  password: string;
+}
 
 // registerUser (POST)
-export const registerUser = async (
-  req: Request<{}, {}, UserRegistrationBody>,
-  res: Response
-) => {
+export const registerUser: RequestHandler<
+  {},
+  {},
+  UserRegistrationBody
+> = async (req, res, next) => {
   try {
-    const { name, email, password }: UserRegistrationBody = req.body;
+    const { name, email, password } = req.body;
 
-    // Validate input
+    // input should not be empty
     if (!name || !email || !password) {
-      return errorRes(
-        res,
-        400,
-        `Please provide a name, email, phone, and password.`
-      );
+      errorRes(res, 400, 'Please provide a name, email, and password.');
+      return;
     }
-    if (password.length < 8) {
-      return errorRes(res, 400, `Password must be at least 8 characters long.`);
-    }
-    const existingUser = await User.findOne({ email: email });
+
+    // check if email is used
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return errorRes(res, 400, `User already exists. Please login.`);
+      errorRes(res, 400, 'User already exists. Please login.');
+      return;
     }
-    // const tokenString = randomString({
-    //   length: 64,
-    //   numeric: true,
-    //   letters: true,
-    // });
+
+    // password should be at least 8 characters long
+    if (password.length < 8) {
+      errorRes(res, 400, 'Password must be at least 8 characters long.');
+      return;
+    }
+
     const hashPassword = await hashedPassword(password);
+    const tokenString = randomString.generate({ length: 64 });
+
+    // create new user
     const newUser = new User({
       name,
       email,
@@ -42,29 +56,41 @@ export const registerUser = async (
       isAdmin: 0,
       isVerified: 0,
       isBanned: false,
-      // image: req.file?.path,
-      // token: tokenString,
+      token: tokenString,
     });
 
     const userData = await newUser.save();
+
     if (!userData) {
-      return errorRes(res, 400, 'User unsucessfully registered!');
+      errorRes(res, 400, 'User unsuccessfully registered!');
+      return;
     }
-    if (userData) {
-      sendVerificationEmail(userData.email, userData.name, userData.token);
-      return successRes(
-        res,
-        201,
-        'Registration successful! Please verify your email address before login',
-        ''
-      );
+
+    console.log(sendVerificationEmail);
+    console.log('Auth Email:', process.env.SMTP_AUTH_EMAIL);
+    console.log(
+      'Auth Password Length:',
+      process.env.SMTP_AUTH_PASSWORD?.length
+    );
+    // send verification email
+    if (userData.name && userData.email && typeof userData.token === 'string') {
+      sendVerificationEmail(userData.name, userData.email, userData.token);
     } else {
-      return errorRes(res, 400, 'Route not found!');
+      errorRes(res, 400, 'User data is incomplete.');
+      return;
     }
+
+    successRes(
+      res,
+      201,
+      'Registration successful! Please verify your email address before login.'
+    );
+    return;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return errorRes(res, 500, `Error: ${error.message}`);
+      errorRes(res, 500, `Error: ${error.message}`);
+    } else {
+      next(error);
     }
-    return errorRes(res, 500, 'An unknown error occurred.');
   }
 };
