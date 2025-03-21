@@ -4,10 +4,10 @@ import express, {
   NextFunction,
   RequestHandler,
 } from 'express';
-import User from '../models/UserModel';
-import { errorRes, successRes } from '../middleware/apiErrorHandler';
-import { sendVerificationEmail } from '../utils/sendVerficationEmail';
-import { hashedPassword } from '../helpers/hashPassword';
+import User from '../models/user.model';
+import { errorRes, successRes } from '../middleware/errorhandler';
+import { sendVerificationEmail } from '../utils/verification.email';
+import { hashedPassword } from '../helpers/hash.password';
 import randomString from 'randomstring';
 
 // Define expected body shape
@@ -18,11 +18,11 @@ interface UserRegistrationBody {
 }
 
 // registerUser (POST)
-export const registerUser: RequestHandler<
-  {},
-  {},
-  UserRegistrationBody
-> = async (req, res, next) => {
+export const registerUser: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { name, email, password } = req.body;
 
@@ -59,19 +59,12 @@ export const registerUser: RequestHandler<
       token: tokenString,
     });
 
+    // save user to database
     const userData = await newUser.save();
-
     if (!userData) {
       errorRes(res, 400, 'User unsuccessfully registered!');
       return;
     }
-
-    console.log(sendVerificationEmail);
-    console.log('Auth Email:', process.env.SMTP_AUTH_EMAIL);
-    console.log(
-      'Auth Password Length:',
-      process.env.SMTP_AUTH_PASSWORD?.length
-    );
     // send verification email
     if (userData.name && userData.email && typeof userData.token === 'string') {
       sendVerificationEmail(userData.name, userData.email, userData.token);
@@ -86,7 +79,41 @@ export const registerUser: RequestHandler<
       'Registration successful! Please verify your email address before login.'
     );
     return;
-  } catch (error: unknown) {
+  } catch (error) {
+    if (error instanceof Error) {
+      errorRes(res, 500, `Error: ${error.message}`);
+    } else {
+      next(error);
+    }
+  }
+};
+
+// verify-user (POST)
+export const verifyUser: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { token } = req.params;
+    const user = await User.findOne({ token: token });
+    if (!user) {
+      errorRes(res, 400, `Invalid link!`);
+      return;
+    } else {
+      const updatedUser = await User.updateOne(
+        { token: token },
+        {
+          $set: {
+            isVerified: true,
+            token: '',
+          },
+        }
+      );
+      successRes(res, 200, `User verification successful!`, updatedUser);
+      return;
+    }
+  } catch (error) {
     if (error instanceof Error) {
       errorRes(res, 500, `Error: ${error.message}`);
     } else {

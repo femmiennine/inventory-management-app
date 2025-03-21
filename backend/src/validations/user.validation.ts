@@ -1,6 +1,6 @@
 import { body, validationResult, ValidationChain } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
-import { errorRes } from '../middleware/apiErrorHandler';
+import { errorRes } from '../middleware/errorhandler';
 
 // Middleware array to validate registration input
 export const registerUserValidator: ValidationChain[] = [

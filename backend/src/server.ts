@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import connectDB from './config/db';
 import { dev } from './config/dev';
-import userRouter from './routes/userRoutes';
+import userRouter from './routes/user.route';
 
 connectDB(); // Connect to MongoDB
 

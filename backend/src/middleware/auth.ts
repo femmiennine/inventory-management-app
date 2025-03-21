@@ -5,7 +5,7 @@ import jwt, {
   TokenExpiredError,
   NotBeforeError,
 } from 'jsonwebtoken';
-import { errorRes } from './apiErrorHandler';
+import { errorRes } from './errorhandler';
 import { dev } from '../config/dev';
 
 export interface ICustomRequest extends Request {
