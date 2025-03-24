@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt, {
   JwtPayload,
   JsonWebTokenError,
@@ -12,55 +12,67 @@ export interface ICustomRequest extends Request {
   id: string | JwtPayload;
 }
 
-export interface IJWTToken {
+export interface TokenInterface {
   id: string;
+  iat: number;
+  exp: number;
 }
 
-export const isAuthorized = (
+export const isAuthorized: RequestHandler = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    // check if cookie exists
     if (!req.headers.cookie) {
-      return errorRes(res, 401, 'Authentication required');
+      errorRes(res, 401, 'Authentication required');
+      return;
     }
 
+    // get token from cookie
     const token = req.headers.cookie.split('=')[1];
-
     if (!token) {
-      return errorRes(res, 401, 'Authentication token missing');
+      errorRes(res, 401, 'Authentication token missing');
+      return;
     }
 
+    // verify the token
     jwt.verify(
       token,
       String(dev.app.private_key),
       (error: Error | null, decoded: any) => {
         if (error) {
           if (error instanceof TokenExpiredError) {
-            return errorRes(res, 401, 'Token has expired');
+            errorRes(res, 401, 'Token has expired');
+            return;
           }
           if (error instanceof JsonWebTokenError) {
-            return errorRes(res, 401, 'Invalid token');
+            errorRes(res, 401, 'Invalid token');
+            return;
           }
           if (error instanceof NotBeforeError) {
-            return errorRes(res, 401, 'Token not yet active');
+            errorRes(res, 401, 'Token not yet active');
+            return;
           }
-          return errorRes(res, 401, 'Token verification failed');
+          errorRes(res, 401, 'Token verification failed');
         }
 
         if (!decoded) {
-          return errorRes(res, 401, 'Invalid token payload');
+          errorRes(res, 401, 'Invalid token payload');
+          return;
         }
 
-        (req as ICustomRequest).id = (decoded as IJWTToken).id;
+        (req as ICustomRequest).id = (decoded as TokenInterface).id;
         next();
       }
     );
   } catch (error) {
     if (error instanceof Error) {
-      return errorRes(res, 500, `Authentication error: ${error.message}`);
+      errorRes(res, 500, `Authentication error: ${error.message}`);
+      return;
+    } else {
+      next(error);
     }
-    return errorRes(res, 500, 'An unknown authentication error occurred');
   }
 };

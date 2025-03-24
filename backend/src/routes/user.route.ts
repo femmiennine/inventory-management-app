@@ -3,6 +3,8 @@ import {
   registerUser,
   verifyUser,
   loginUser,
+  logoutUser,
+  forgetPassword,
 } from '../controllers/user.controller';
 import {
   registerUserValidator,
@@ -14,5 +16,7 @@ const router = express.Router();
 router.post('/register', registerUserValidator, validate, registerUser);
 router.post('/verify/:token', verifyUser);
 router.post('/login', loginUserValidator, validate, loginUser);
+router.post('/logout', logoutUser);
+router.post('/forget-password', forgetPassword);
 
 export default router;
