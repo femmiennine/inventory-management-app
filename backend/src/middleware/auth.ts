@@ -57,7 +57,7 @@ export const isAuthorized = (
         next();
       }
     );
-  } catch (error: unknown) {
+  } catch (error) {
     if (error instanceof Error) {
       return errorRes(res, 500, `Authentication error: ${error.message}`);
     }

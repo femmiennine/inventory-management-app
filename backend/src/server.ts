@@ -3,16 +3,17 @@ import cors from 'cors';
 import connectDB from './config/db';
 import { dev } from './config/dev';
 import userRouter from './routes/user.route';
+import cookieParser from 'cookie-parser';
 
 connectDB(); // Connect to MongoDB
 
 const app = express();
 const PORT = dev.app.port;
 
-// Body parser middleware
+app.use(cors());
 app.use(express.json()); // raw JSON
 app.use(express.urlencoded({ extended: true })); // HTML forms
-app.use(cors());
+app.use(cookieParser());
 
 // routes
 app.use('/api/users', userRouter);

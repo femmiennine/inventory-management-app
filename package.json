@@ -24,6 +24,7 @@
   "homepage": "https://github.com/femmiennine/inventory-management-app#readme",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
@@ -43,6 +44,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "bcrypt": "^5.1.1",
     "concurrently": "^9.1.2",
+    "cookie-parser": "^1.4.7",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.0",

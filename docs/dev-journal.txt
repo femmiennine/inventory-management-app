@@ -35,10 +35,17 @@ Project Setup and Configuration
 2. hashPassword by bcrypt
 3. sendEmailVerification by nodemailer
 4. Created UserController
-5. Learned about: ```type UserRegistrationBody = Pick<UserInterface, 'name' | 'email' | 'password'>;```
-Next Steps: valition, fix hashPassword in UserController, create auth middleware, create auth/user routes
+Next Steps: validation, fix hashPassword in UserController, create auth middleware, create auth/user routes
 20/03/2025
 1. Created UserValidation
 2 Created auth middleware
 21/03/2025
-1. Created auth/user routes
+1. Created auth/user registration route
+2. Fixed UserValidation
+3. Created user verification route
+24/03/2025
+1. Created auth/login route
+2. Created auth/logout route
+3. Created auth/forgot-password route
+4. Created auth/reset-password route
+5. Created auth/change-password route
