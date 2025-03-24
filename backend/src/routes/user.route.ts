@@ -5,6 +5,7 @@ import {
   loginUser,
   logoutUser,
   forgetPassword,
+  resetPassword,
 } from '../controllers/user.controller';
 import {
   registerUserValidator,
@@ -18,5 +19,6 @@ router.post('/verify/:token', verifyUser);
 router.post('/login', loginUserValidator, validate, loginUser);
 router.post('/logout', logoutUser);
 router.post('/forget-password', forgetPassword);
+router.post('/reset-password', resetPassword);
 
 export default router;

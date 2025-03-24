@@ -19,6 +19,7 @@ interface UserRegistrationBody {
   name: string;
   email: string;
   password: string;
+  token: string;
 }
 
 // POST register user http://localhost:8000/api/user/register
@@ -241,7 +242,7 @@ export const forgetPassword: RequestHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { email } = req.body;
+    const { email }: UserRegistrationBody = req.body;
     if (!email) {
       errorRes(res, 400, `Please provide an email address`);
       return;
@@ -267,6 +268,44 @@ export const forgetPassword: RequestHandler = async (
 
     await sendResetPasswordEmail(user.name, user.email);
     successRes(res, 201, 'Check your email to reset password');
+    return;
+  } catch (error) {
+    if (error instanceof Error) {
+      errorRes(res, 500, `Error: ${error.message}`);
+      return;
+    } else {
+      next(error);
+    }
+  }
+};
+
+// reset password http://localhost:8000/api/user/reset-password
+export const resetPassword: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { password, email }: UserRegistrationBody = req.body;
+    const hashPassword = await hashedPassword(password);
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      {
+        $set: {
+          password: hashPassword,
+          token: '',
+        },
+      }
+    );
+
+    console.log(user);
+    // check if user exists
+    if (!user) {
+      errorRes(res, 404, `User does not exist`);
+      return;
+    }
+
+    successRes(res, 201, `Password changed successfully`, '');
     return;
   } catch (error) {
     if (error instanceof Error) {
