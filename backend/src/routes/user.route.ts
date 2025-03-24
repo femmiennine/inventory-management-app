@@ -6,18 +6,21 @@ import {
   logoutUser,
   forgetPassword,
   resetPassword,
+  userProfile,
 } from '../controllers/user.controller';
 import {
   registerUserValidator,
   loginUserValidator,
   validate,
 } from '../validations/user.validation';
+import { isAuthorized } from '../middleware/auth';
 const router = express.Router();
 
 router.post('/register', registerUserValidator, validate, registerUser);
 router.post('/verify/:token', verifyUser);
 router.post('/login', loginUserValidator, validate, loginUser);
-router.post('/logout', logoutUser);
+router.get('/profile', isAuthorized, userProfile);
+router.post('/logout', isAuthorized, logoutUser);
 router.post('/forget-password', forgetPassword);
 router.post('/reset-password', resetPassword);
 

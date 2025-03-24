@@ -316,3 +316,34 @@ export const resetPassword: RequestHandler = async (
     }
   }
 };
+
+// GET user profile http://localhost:8000/api/user/profile
+export const userProfile: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // get user data
+    const user = await User.findOne(
+      { _id: (req as ICustomRequest).id },
+      { password: 0 }
+    );
+
+    // check if user exists
+    if (!user) {
+      errorRes(res, 404, `No user exist with this id`);
+      return;
+    }
+
+    successRes(res, 200, `User info returned successfully`, user);
+    return;
+  } catch (error) {
+    if (error instanceof Error) {
+      errorRes(res, 500, `Error: ${error.message}`);
+      return;
+    } else {
+      next(error);
+    }
+  }
+};
