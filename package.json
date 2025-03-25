@@ -8,7 +8,7 @@
     "start": "node backend/dist/server.js",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "nodemon --ext ts --exec ts-node backend/src/server.ts",
-    "dev:frontend": "cd frontend && npx vite"
+    "dev:frontend": "cd frontend && npm run dev"
   },
   "repository": {
     "type": "git",
