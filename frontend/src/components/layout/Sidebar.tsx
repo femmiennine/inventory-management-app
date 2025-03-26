@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import {
   HomeIcon,
   ArchiveBoxIcon,
@@ -8,6 +9,10 @@ import {
   ChartBarIcon,
   UsersIcon,
   PowerIcon,
+  Bars3Icon,
+  XMarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 
 const navItems = [
@@ -50,45 +55,156 @@ const navItems = [
 ];
 
 const Sidebar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth >= 768) {
+        setIsMobileOpen(false);
+      }
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setIsMobileOpen(!isMobileOpen);
+    } else {
+      setIsCollapsed(!isCollapsed);
+    }
+  };
+
+  const MobileMenu = () => (
+    <button
+      onClick={toggleSidebar}
+      className={`md:hidden fixed top-7 right-4 z-50 p-1 rounded-md ${
+        isMobileOpen
+          ? 'bg-gray-800 text-white hover:bg-gray-600'
+          : 'bg-white text-gray-800 hover:bg-gray-200 shadow-md'
+      }`}
+      aria-label='Toggle menu'
+    >
+      {isMobileOpen ? (
+        <XMarkIcon className='w-5 h-5' />
+      ) : (
+        <Bars3Icon className='w-5 h-5' />
+      )}
+    </button>
+  );
+
   return (
-    <aside className='w-64 h-screen flex flex-col bg-white dark:bg-gray-900 border-r dark:border-gray-700'>
-      <div className='p-6 text-xl font-bold text-gray-800 dark:text-white'>
-        FoodStock
-      </div>
+    <>
+      <MobileMenu />
 
-      {/* Navigation Links */}
-      <nav className='flex-1 px-4 space-y-1'>
-        {navItems.map(({ path, label, icon, badge }) => (
-          <NavLink
-            key={path}
-            to={path}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md font-medium transition ${
-                isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`
-            }
+      <aside
+        className={`
+          ${isMobile ? 'fixed inset-0 z-40' : 'relative'}
+          ${
+            isMobile
+              ? isMobileOpen
+                ? 'translate-x-0'
+                : '-translate-x-full'
+              : ''
+          }
+          ${!isMobile && isCollapsed ? 'w-20' : 'w-64'}
+          ${isMobile ? 'h-full w-full' : 'h-screen'}
+          flex flex-col bg-white dark:bg-gray-900
+          transition-all duration-300 ease-in-out transform
+          overflow-hidden
+        `}
+      >
+        <div
+          className={`
+          flex items-center justify-between
+          ${isMobile ? 'p-8' : 'p-6'}
+          text-xl font-bold text-gray-800 dark:text-white
+        `}
+        >
+          {(!isCollapsed || isMobile) && <span>FoodStock</span>}
+          {!isMobile && (
+            <button
+              onClick={toggleSidebar}
+              className='p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800'
+              aria-label='Toggle sidebar'
+            >
+              {isCollapsed ? (
+                <ChevronRightIcon className='w-5 h-5' />
+              ) : (
+                <ChevronLeftIcon className='w-5 h-5' />
+              )}
+            </button>
+          )}
+        </div>
+
+        <nav className='flex-1 px-4 space-y-2 overflow-y-auto'>
+          {navItems.map(({ path, label, icon, badge }) => (
+            <NavLink
+              key={path}
+              to={path}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-3 rounded-md font-medium transition
+                ${
+                  isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }
+                ${isMobile ? 'text-lg' : 'text-base'}
+                `
+              }
+              onClick={() => isMobile && setIsMobileOpen(false)}
+            >
+              {icon}
+              {(!isCollapsed || isMobile) && (
+                <>
+                  <span className='flex-1'>{label}</span>
+                  {badge && (
+                    <span className='bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full'>
+                      {badge}
+                    </span>
+                  )}
+                </>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div
+          className={`
+          p-4 border-t dark:border-gray-700
+          ${isMobile ? 'mt-auto' : ''}
+        `}
+        >
+          <button
+            className={`
+            flex items-center gap-2 text-red-500 hover:underline font-medium
+            ${isMobile ? 'text-lg' : 'text-sm'}
+            w-full
+          `}
           >
-            {icon}
-            <span className='flex-1'>{label}</span>
-            {badge && (
-              <span className='bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full'>
-                {badge}
-              </span>
-            )}
-          </NavLink>
-        ))}
-      </nav>
+            <PowerIcon className='w-5 h-5' />
+            {(!isCollapsed || isMobile) && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
 
-      {/* Logout */}
-      <div className='p-4 border-t dark:border-gray-700'>
-        <button className='flex items-center gap-2 text-red-500 hover:underline font-medium text-sm'>
-          <PowerIcon className='w-5 h-5' />
-          Logout
-        </button>
-      </div>
-    </aside>
+      {isMobile && (
+        <div
+          className={`
+            fixed inset-0 bg-gray-900 z-30
+            transition-opacity duration-300 ease-in-out
+            ${isMobileOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'}
+          `}
+          onClick={() => setIsMobileOpen(false)}
+          aria-hidden='true'
+        />
+      )}
+    </>
   );
 };
 
