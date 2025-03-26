@@ -116,7 +116,7 @@ const Sidebar = () => {
           ${isMobile ? 'h-full w-full' : 'h-screen'}
           flex flex-col bg-white dark:bg-gray-900
           transition-all duration-300 ease-in-out transform
-          overflow-hidden
+          overflow-hidden border-r border-gray-400 dark:border-gray-700 rounded-r-lg
         `}
       >
         <div
@@ -182,7 +182,7 @@ const Sidebar = () => {
         >
           <button
             className={`
-            flex items-center gap-2 text-red-500 hover:underline font-medium
+            flex items-center gap-2 text-gray-700 dark:text-white hover:underline font-medium
             ${isMobile ? 'text-lg' : 'text-sm'}
             w-full
           `}
