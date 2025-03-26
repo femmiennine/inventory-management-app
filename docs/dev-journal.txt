@@ -49,3 +49,10 @@ Next Steps: validation, fix hashPassword in UserController, create auth middlewa
 3. Created auth/forgot-password route
 4. Created auth/reset-password route
 5. Created auth/change-password route
+26/03/2025
+1. Fixed frontend setup issues
+2. Sidebar and Navbar components
+3. Routing setup
+4. Redux store setup
+5. Types folder setup
+Issue: I had difficulty setting up the frontend project with Tailwind and Vite.
