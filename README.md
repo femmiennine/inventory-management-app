@@ -8,7 +8,6 @@
 ## Features
 
 Development of this project is ongoing. Features will be added one at a time.
-- 
 
 ## Login Sample
 
