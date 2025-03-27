@@ -8,7 +8,7 @@
 ## Features
 
 Development of this project is ongoing. Features will be added one at a time.
-- Register User with Email Verification message
+- 
 
 ## Login Sample
 
