@@ -21,7 +21,7 @@ export const sendVerificationEmail = async (
       from: dev.smtp.auth_email,
       to: email,
       subject: 'Verification Email',
-      html: `<p> Welcome to FoodStock Inventory Management System, ${name}! <a href="http://localhost:5173/verify-user/${token}"> Click for email verification </a> </p>`,
+      html: `<p> Welcome to FoodStock Inventory Management System, ${name}! <a href="http://localhost:5173/verify/${token}"> Click for email verification </a> </p>`,
     };
 
     await transporter.sendMail(mailOptions, (error, info) => {

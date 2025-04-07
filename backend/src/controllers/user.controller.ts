@@ -4,7 +4,6 @@ import express, {
   NextFunction,
   RequestHandler,
 } from 'express';
-import mongoose from 'mongoose';
 import User from '../models/user.model';
 import { errorRes, successRes } from '../middleware/errorhandler';
 import { sendVerificationEmail } from '../utils/verification.email';
