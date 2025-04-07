@@ -4,6 +4,7 @@ import express, {
   NextFunction,
   RequestHandler,
 } from 'express';
+import mongoose from 'mongoose';
 import User from '../models/user.model';
 import { errorRes, successRes } from '../middleware/errorhandler';
 import { sendVerificationEmail } from '../utils/verification.email';
@@ -379,7 +380,7 @@ export const getUsers: RequestHandler = async (
   }
 };
 
-// DELETE user http://localhost:8000/api/user/delete/:id
+// DELETE user http://localhost:8000/api/user/delete/:_id
 export const deleteUser: RequestHandler = async (
   req: Request,
   res: Response,
@@ -388,10 +389,12 @@ export const deleteUser: RequestHandler = async (
   try {
     const { id } = req.params;
 
+    console.log(id);
+
     // check if user exists
     const user = await User.findById(id);
     if (!user) {
-      errorRes(res, 404, `No user exist with this ${id}`);
+      errorRes(res, 404, `No user exist with this id`);
       return;
     }
 
