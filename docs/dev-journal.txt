@@ -52,7 +52,9 @@ Next Steps: validation, fix hashPassword in UserController, create auth middlewa
 26/03/2025
 1. Fixed frontend setup issues
 2. Sidebar and Navbar components
-3. Routing setup
-4. Redux store setup
-5. Types folder setup
+3. Responsive Sidebar and Navbar
+4. Routing setup
+5. Redux store setup
+6. Types folder setup
 Issue: I had difficulty setting up the frontend project with Tailwind and Vite.
+Next steps: User Management (create the routes), UI components, and styling.

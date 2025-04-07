@@ -20,6 +20,9 @@ interface UserRegistrationBody {
   email: string;
   password: string;
   token: string;
+  isAdmin: boolean;
+  isVerified: boolean;
+  isBanned: boolean;
 }
 
 // POST register user http://localhost:8000/api/user/register
@@ -279,7 +282,7 @@ export const forgetPassword: RequestHandler = async (
   }
 };
 
-// reset password http://localhost:8000/api/user/reset-password
+// POST reset password http://localhost:8000/api/user/reset-password
 export const resetPassword: RequestHandler = async (
   req: Request,
   res: Response,
@@ -337,6 +340,112 @@ export const userProfile: RequestHandler = async (
     }
 
     successRes(res, 200, `User info returned successfully`, user);
+    return;
+  } catch (error) {
+    if (error instanceof Error) {
+      errorRes(res, 500, `Error: ${error.message}`);
+      return;
+    } else {
+      next(error);
+    }
+  }
+};
+
+// GET users http://localhost:8000/api/user/profile
+export const getUsers: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // get user data
+    const users = await User.find({}, { password: 0 });
+
+    // check if users exists
+    if (!users) {
+      errorRes(res, 404, `No users exist`);
+      return;
+    }
+
+    successRes(res, 200, `Users info returned successfully`, users);
+    return;
+  } catch (error) {
+    if (error instanceof Error) {
+      errorRes(res, 500, `Error: ${error.message}`);
+      return;
+    } else {
+      next(error);
+    }
+  }
+};
+
+// DELETE user http://localhost:8000/api/user/delete/:id
+export const deleteUser: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    // check if user exists
+    const user = await User.findById(id);
+    if (!user) {
+      errorRes(res, 404, `No user exist with this ${id}`);
+      return;
+    }
+
+    // delete user
+    await User.findByIdAndDelete(id);
+    successRes(res, 200, `User deleted successfully`, '');
+    return;
+  } catch (error) {
+    if (error instanceof Error) {
+      errorRes(res, 500, `Error: ${error.message}`);
+      return;
+    } else {
+      next(error);
+    }
+  }
+};
+
+// PUT update user http://localhost:8000/api/user/update/:id
+export const updateUser: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { name, email, isAdmin, isBanned }: UserRegistrationBody = req.body;
+
+    // check if user exists
+    const user = await User.findById(id);
+    if (!user) {
+      errorRes(res, 404, `No user exist with this id`);
+      return;
+    }
+
+    // update user
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          name: name,
+          email: email,
+          isAdmin: isAdmin,
+          isBanned: isBanned,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      errorRes(res, 400, `User unsuccessfully updated!`);
+      return;
+    }
+
+    successRes(res, 200, `User updated successfully`, updatedUser);
     return;
   } catch (error) {
     if (error instanceof Error) {
