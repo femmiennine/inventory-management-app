@@ -122,6 +122,7 @@ const Sidebar = () => {
 
       <aside
         className={`
+          h-screen sticky top-0
           flex flex-col justify-between
           ${isMobile ? 'fixed inset-0 z-40' : 'relative'}
           ${
