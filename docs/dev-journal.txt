@@ -58,3 +58,5 @@ Next Steps: validation, fix hashPassword in UserController, create auth middlewa
 6. Types folder setup
 Issue: I had difficulty setting up the frontend project with Tailwind and Vite.
 Next steps: User Management (create the routes), UI components, and styling.
+07/04/2025
+1. User Route

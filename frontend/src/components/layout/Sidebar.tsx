@@ -13,6 +13,7 @@ import {
   XMarkIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  SunIcon,
 } from '@heroicons/react/24/outline';
 
 const navItems = [
@@ -51,6 +52,23 @@ const navItems = [
     path: '/user-management',
     label: 'User Management',
     icon: <UsersIcon className='w-5 h-5' />,
+  },
+];
+
+const bottomNavItems = [
+  {
+    label: 'Theme',
+    icon: <SunIcon className='w-5 h-5' />,
+    onClick: () => {
+      // your theme toggle logic
+    },
+  },
+  {
+    label: 'Logout',
+    icon: <PowerIcon className='w-5 h-5' />,
+    onClick: () => {
+      // your logout logic
+    },
   },
 ];
 
@@ -104,6 +122,7 @@ const Sidebar = () => {
 
       <aside
         className={`
+          flex flex-col justify-between
           ${isMobile ? 'fixed inset-0 z-40' : 'relative'}
           ${
             isMobile
@@ -114,8 +133,7 @@ const Sidebar = () => {
           }
           ${!isMobile && isCollapsed ? 'w-20' : 'w-64'}
           ${isMobile ? 'h-full w-full' : 'h-screen'}
-          flex flex-col bg-white dark:bg-gray-900
-          transition-all duration-300 ease-in-out transform
+          bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out transform
           overflow-hidden border-r border-gray-400 dark:border-gray-700 rounded-r-lg
         `}
       >
@@ -174,22 +192,22 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        <div
-          className={`
-          p-4 border-t dark:border-gray-700
-          ${isMobile ? 'mt-auto' : ''}
-        `}
-        >
-          <button
-            className={`
-            flex items-center gap-2 text-gray-700 dark:text-white hover:underline font-medium
-            ${isMobile ? 'text-lg' : 'text-sm'}
-            w-full
-          `}
-          >
-            <PowerIcon className='w-5 h-5' />
-            {(!isCollapsed || isMobile) && <span>Logout</span>}
-          </button>
+        <div className='px-4 py-2 border-t dark:border-gray-700 space-y-2'>
+          {bottomNavItems.map(({ label, icon, onClick }) => (
+            <button
+              key={label}
+              onClick={onClick}
+              className={`
+        flex items-center gap-3 w-full py-3 px-3 rounded-md font-medium transition
+        text-gray-700 dark:text-gray-300
+        hover:bg-gray-100 dark:hover:bg-gray-800
+        ${isMobile ? 'text-lg' : 'text-base'}
+      `}
+            >
+              {icon}
+              {(!isCollapsed || isMobile) && <span>{label}</span>}
+            </button>
+          ))}
         </div>
       </aside>
 
