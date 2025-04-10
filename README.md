@@ -22,3 +22,11 @@ Your own keys must be given in env file. See .env.example file for reference.
 ## To Run
 
 `npm run dev`
+
+## Images
+
+### Light Mode
+![image](https://github.com/user-attachments/assets/d2de0f32-3e3c-490a-bab0-55f0d31114e7)
+
+### Dark Mode
+![image](https://github.com/user-attachments/assets/5ddd4838-032e-4cd8-8dfd-d52ca89bfcd2)
