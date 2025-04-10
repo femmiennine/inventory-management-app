@@ -75,8 +75,8 @@ const UserManagement: React.FC = () => {
   });
 
   return (
-    <div className='p-6 bg-gray-50 min-h-screen text-gray-800 dark:text-gray-100'>
-      <h2 className='text-2xl text-gray-800 font-semibold mb-4'>
+    <div className='p-6 bg-gray-50 min-h-screen text-gray-800 dark:text-gray-100 dark:bg-gray-900'>
+      <h2 className='text-2xl text-gray-50 font-semibold mb-4'>
         User Management
       </h2>
 
@@ -126,7 +126,7 @@ const UserManagement: React.FC = () => {
       {/* Table */}
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md'>
-          <thead className='bg-gray-100 dark:bg-gray-700 text-left text-sm text-gray-600 dark:text-gray-200'>
+          <thead className='bg-gray-300 dark:bg-gray-700 text-left text-sm text-gray-600 dark:text-gray-200'>
             <tr>
               <th className='py-3 px-4'>Name</th>
               <th className='py-3 px-4'>Email</th>
@@ -139,7 +139,7 @@ const UserManagement: React.FC = () => {
             {filteredUsers.map((user) => (
               <tr
                 key={user.id}
-                className='border-b dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition'
+                className='border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition'
               >
                 <td className='py-3 px-4'>{user.name}</td>
                 <td className='py-3 px-4'>{user.email}</td>

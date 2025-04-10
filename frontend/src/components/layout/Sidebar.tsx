@@ -134,8 +134,8 @@ const Sidebar = () => {
           }
           ${!isMobile && isCollapsed ? 'w-20' : 'w-64'}
           ${isMobile ? 'h-full w-full' : 'h-screen'}
-          bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out transform
-          overflow-hidden border-r border-gray-400 dark:border-gray-700 rounded-r-lg
+          bg-white dark:bg-gray-800 transition-all duration-300 ease-in-out transform
+          overflow-hidden border-r dark:border-gray-800
         `}
       >
         <div
@@ -171,7 +171,7 @@ const Sidebar = () => {
                 ${
                   isActive
                     ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }
                 ${isMobile ? 'text-lg' : 'text-base'}
                 `
