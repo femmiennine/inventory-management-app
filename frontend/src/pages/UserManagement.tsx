@@ -76,7 +76,7 @@ const UserManagement: React.FC = () => {
 
   return (
     <div className='p-6 bg-gray-50 min-h-screen text-gray-800 dark:text-gray-100 dark:bg-gray-900'>
-      <h2 className='text-2xl text-gray-50 font-semibold mb-4'>
+      <h2 className='text-2xl text-gray-800 dark:text-gray-50 font-semibold mb-4'>
         User Management
       </h2>
 

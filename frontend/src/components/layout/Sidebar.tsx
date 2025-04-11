@@ -13,8 +13,8 @@ import {
   XMarkIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  SunIcon,
 } from '@heroicons/react/24/outline';
+import ToggleThemeButton from '../ui/ToggleThemeButton';
 
 const navItems = [
   {
@@ -58,7 +58,7 @@ const navItems = [
 const bottomNavItems = [
   {
     label: 'Theme',
-    icon: <SunIcon className='w-5 h-5' />,
+    icon: <ToggleThemeButton />,
     onClick: () => {
       // your theme toggle logic
     },
